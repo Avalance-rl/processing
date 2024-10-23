@@ -1,4 +1,4 @@
-module ens/proto-contracts/proto-processing-request
+module github.com/Avalance-rl/contract-processing
 
 go 1.22
 

@@ -1,4 +1,4 @@
-module github.com/Avalance-rl/contract-processing
+module github.com/Avalance-rl/processing
 
 go 1.22
 require (

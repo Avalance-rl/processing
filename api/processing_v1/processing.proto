@@ -6,31 +6,31 @@ option go_package = "avalance.processing.v1;processing_v1";
 
 
 service ProcessingService {
-  
+
   rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse);
 
   rpc ListGroups(ListGroupsRequest) returns (ListGroupsResponse);
 
   rpc DeleteGroup(DeleteGroupRequest) returns (DeleteGroupResponse);
-  
+
   rpc ExecuteDispatch(ExecuteDispatchRequest) returns (ExecuteDispatchResponse);
 
 }
 
 message CreateGroupRequest {
-  string user = 1; 
+  string userEmail = 1;
   string groupName = 2;
-  repeated string usersData = 3;
+  repeated string userData = 3;
 }
 
 
 message CreateGroupResponse {
-  string groupId = 1;
-  string message = 2;
+  string groupID = 1;
+  string infoMessage = 2;
 }
 
 message ListGroupsRequest {
-  string userId = 1;
+  string userEmail = 1;
 }
 
 message ListGroupsResponse {
@@ -38,8 +38,8 @@ message ListGroupsResponse {
 }
 
 message DeleteGroupRequest {
-  string userId = 1;  
-  string groupId = 2;
+  string userEmail = 1;
+  string groupName = 2;
 }
 
 message DeleteGroupResponse {
@@ -48,7 +48,7 @@ message DeleteGroupResponse {
 }
 
 message ExecuteDispatchRequest {
-  string user = 1;
+  string userEmail = 1;
   string groupName = 2;
 }
 
@@ -60,8 +60,9 @@ message ExecuteDispatchResponse {
 
 
 message Group {
-  string groupId = 1;
-  string groupName = 2;
+  string id = 1;
+  string name = 2;
   repeated string userData = 3;
   string createdAt = 4;
+  string userEmail = 5;
 }

@@ -25,6 +25,7 @@ type ProcessingServiceClient interface {
 	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupResponse, error)
 	ListGroups(ctx context.Context, in *ListGroupsRequest, opts ...grpc.CallOption) (*ListGroupsResponse, error)
 	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*DeleteGroupResponse, error)
+	ExecuteDispatch(ctx context.Context, in *ExecuteDispatchRequest, opts ...grpc.CallOption) (*ExecuteDispatchResponse, error)
 }
 
 type processingServiceClient struct {
@@ -62,6 +63,15 @@ func (c *processingServiceClient) DeleteGroup(ctx context.Context, in *DeleteGro
 	return out, nil
 }
 
+func (c *processingServiceClient) ExecuteDispatch(ctx context.Context, in *ExecuteDispatchRequest, opts ...grpc.CallOption) (*ExecuteDispatchResponse, error) {
+	out := new(ExecuteDispatchResponse)
+	err := c.cc.Invoke(ctx, "/processing_v1.ProcessingService/ExecuteDispatch", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProcessingServiceServer is the server API for ProcessingService service.
 // All implementations must embed UnimplementedProcessingServiceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type ProcessingServiceServer interface {
 	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
 	ListGroups(context.Context, *ListGroupsRequest) (*ListGroupsResponse, error)
 	DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupResponse, error)
+	ExecuteDispatch(context.Context, *ExecuteDispatchRequest) (*ExecuteDispatchResponse, error)
 	mustEmbedUnimplementedProcessingServiceServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedProcessingServiceServer) ListGroups(context.Context, *ListGro
 }
 func (UnimplementedProcessingServiceServer) DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteGroup not implemented")
+}
+func (UnimplementedProcessingServiceServer) ExecuteDispatch(context.Context, *ExecuteDispatchRequest) (*ExecuteDispatchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExecuteDispatch not implemented")
 }
 func (UnimplementedProcessingServiceServer) mustEmbedUnimplementedProcessingServiceServer() {}
 
@@ -152,6 +166,24 @@ func _ProcessingService_DeleteGroup_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProcessingService_ExecuteDispatch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExecuteDispatchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProcessingServiceServer).ExecuteDispatch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/processing_v1.ProcessingService/ExecuteDispatch",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProcessingServiceServer).ExecuteDispatch(ctx, req.(*ExecuteDispatchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProcessingService_ServiceDesc is the grpc.ServiceDesc for ProcessingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var ProcessingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteGroup",
 			Handler:    _ProcessingService_DeleteGroup_Handler,
+		},
+		{
+			MethodName: "ExecuteDispatch",
+			Handler:    _ProcessingService_ExecuteDispatch_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

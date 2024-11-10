@@ -12,6 +12,8 @@ service ProcessingService {
   rpc ListGroups(ListGroupsRequest) returns (ListGroupsResponse);
 
   rpc DeleteGroup(DeleteGroupRequest) returns (DeleteGroupResponse);
+  
+  rpc ExecuteDispatch(ExecuteDispatchRequest) returns (ExecuteDispatchResponse);
 
 }
 
@@ -41,7 +43,18 @@ message DeleteGroupRequest {
 }
 
 message DeleteGroupResponse {
-  string message = 1;
+  string status = 1;
+  string errMessage = 2;
+}
+
+message ExecuteDispatchRequest {
+  string user = 1;
+  string groupName = 2;
+}
+
+message ExecuteDispatchResponse {
+  string status = 1;
+  string errMessage = 2;
 }
 
 
